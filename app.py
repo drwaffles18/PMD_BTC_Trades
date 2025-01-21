@@ -34,7 +34,7 @@ def load_trade_signals(sheet_id):
     return df_signals
 
 def get_binance_data(symbol, interval, start, end=None, sheet_id=None):
-    url = 'https://api.binance.com/api/v3/klines'
+    url = 'https://api.binance.us/api/v3/klines'
     params = {
         'symbol': symbol,
         'interval': interval,
