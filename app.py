@@ -331,7 +331,7 @@ def app():
     interval = '4h'
     sheet_id = '1SSNJk-NeOgCUoUZ-CU5J3HiZYb1UDcCuqs8U3NhKOqs'
     start_date = datetime(2022, 1, 1, tzinfo=pytz.UTC)
-    end_date = datetime.now(tz) + timedelta(hours=12)
+    end_date = datetime.now(tz) + timedelta(hours=24)
     
     # Cargar y procesar datos
     full_data = get_binance_data(symbol, interval, start_date, end_date, sheet_id=sheet_id)
