@@ -8,3 +8,4 @@ statsmodels==0.13.2
 tradingview_ta
 altair==4.0
 scikit-learn
+tensorflow
