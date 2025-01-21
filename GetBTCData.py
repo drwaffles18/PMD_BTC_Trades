@@ -13,7 +13,7 @@ class GetBTCData:
         self.end_date = end_date
 
     def get_binance_data(self):
-        url = 'https://api.binance.com/api/v3/klines'
+        url = 'https://api.binance.us/api/v3/klines'
         params = {
             'symbol': self.symbol,
             'interval': self.interval,
