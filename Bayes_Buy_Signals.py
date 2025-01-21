@@ -3,7 +3,7 @@ import pandas as pd
 import pickle
 
 class BayesSignalPredictor:
-    def __init__(self, model_path='C:\\Users\\chefv\\OneDrive\\Documents\\PROMiDAT\\Inteligencia Artificial\\Proyecto Final\\best_model_bayes.pkl'):
+    def __init__(self, model_path='best_model_bayes.pkl'):
         # Cargar el modelo de Bayes
         with open(model_path, 'rb') as model_file:
             self.model = pickle.load(model_file)
