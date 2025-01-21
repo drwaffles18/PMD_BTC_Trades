@@ -353,7 +353,7 @@ def app():
     # Definir filtros globales
     filtered_start_date = st.sidebar.date_input("Inicio", start_date.date())
     filtered_end_date = st.sidebar.date_input("Fin", datetime.now(tz).date())
-    st.sidebar.text("To show today, please select the next day.")
+    st.sidebar.text("Seleccione que deseas hacer.")
     filtered_start_date = pd.Timestamp(filtered_start_date, tz='America/Costa_Rica')
     filtered_end_date = pd.Timestamp(filtered_end_date, tz='America/Costa_Rica')
     mask = (full_data['Open time'] >= filtered_start_date) & (full_data['Open time'] <= filtered_end_date)
@@ -384,7 +384,7 @@ def app():
         
         # Botón para generar predicciones de señales de compra/venta
         if st.sidebar.button("Generar Predicción Buy/Sell"):
-            predictor = BayesSignalPredictor()  # Asegúrate de que el predictor esté correctamente configurado
+            predictor = BayesSignalPredictor()  
             full_data_with_predictions = predictor.predict_signals(full_data)
             if 'current_fig' in st.session_state:
                 # Actualizar el gráfico existente con nuevas señales
@@ -396,7 +396,7 @@ def app():
     # Pestaña de Datos Históricos
     with tab2:
         st.write("Datos Históricos")
-        full_data_styled = convert_and_format(full_data)  # Asegurarse de llamar a convert_and_format
+        full_data_styled = convert_and_format(full_data) 
         st.dataframe(full_data_styled)
 
 if __name__ == "__main__":
