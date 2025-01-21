@@ -41,35 +41,32 @@ class Correccion_Fechas:
     def agregar_fechas_faltantes(self):
         """Agrega las fechas faltantes al dataframe asegurando la correcta frecuencia."""
         if self._faltan_fechas is not None and not self._faltan_fechas.empty:
-            # Crear un DataFrame temporal con todas las columnas necesarias
             df_temporal = pd.DataFrame(index=self._faltan_fechas)
             df_temporal = df_temporal.reindex(columns=self._df.columns, fill_value=pd.NA)
             df_temporal[self._fecha_col] = df_temporal.index
-
-            # Combinar el DataFrame original con el nuevo que tiene las fechas faltantes
             self._df = pd.concat([self._df, df_temporal], ignore_index=False)
             self._df.sort_values(by=[self._fecha_col], inplace=True)
-            self._df.set_index(self._fecha_col, inplace=True, drop=False)  # Mantener la columna de fecha en el DataFrame
+            self._df.set_index(self._fecha_col, inplace=True, drop=False)
         else:
             print("No se agregaron fechas faltantes porque no hay ninguna.")
 
     def imputar_datos_suavizados(self, columna, periodos=5):
-        """Imputa los datos faltantes usando un suavizado."""
-        self._df[columna] = self._df[columna].rolling(periodos, min_periods=1, center=True).mean()
-        if self._faltan_fechas is not None and not self._faltan_fechas.empty:
-            self._df.loc[self._faltan_fechas, columna] = self._df.loc[self._faltan_fechas, columna]
-        else:
-            print("No se han identificado fechas faltantes para imputar.")
+        """Imputa los datos faltantes usando un suavizado. Asegura que NaNs no rompan el proceso."""
+        # Rellena NaNs temporalmente para la imputación
+        self._df[columna].fillna(method='ffill', inplace=True)
+        self._df[columna].fillna(method='bfill', inplace=True)
+
+        self._df[columna] = self._df[columna].rolling(window=periodos, min_periods=1, center=True).mean()
+
+        # Opcional: Restaurar NaN donde originalmente eran NaN si es necesario
+        print("Datos suavizados correctamente.")
 
     def convertir_a_serie_tiempo(self, valor_col):
         """Convierte el dataframe en una serie de tiempo manteniendo los tiempos originales."""
-        self._df.reset_index(inplace=True)  # Asegura que el índice es numérico
-        fechas = pd.DatetimeIndex(self._df[self._fecha_col])  # Se crea el índice sin frecuencia fija
+        self._df.reset_index(inplace=True)
+        fechas = pd.DatetimeIndex(self._df[self._fecha_col])
         serie_tiempo = pd.Series(self._df[valor_col].values, index=fechas)
-        
-        # No intentar asignar la frecuencia, sólo devolver la serie
         return serie_tiempo
-
 
     def __str__(self):
         return f"Correccion_Fechas(DataFrame con {len(self._df)} filas, columna de fechas: '{self._fecha_col}', frecuencia: '{self._freq}')"
