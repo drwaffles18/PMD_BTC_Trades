@@ -63,10 +63,14 @@ class Correccion_Fechas:
 
     def convertir_a_serie_tiempo(self, valor_col):
         """Convierte el dataframe en una serie de tiempo manteniendo los tiempos originales."""
-        self._df.reset_index(inplace=True)
-        fechas = pd.DatetimeIndex(self._df[self._fecha_col])
+        if self._fecha_col in self._df.columns:
+            self._df.set_index(self._fecha_col, inplace=True, drop=True)
+        else:
+            self._df.reset_index(inplace=True)
+        fechas = pd.DatetimeIndex(self._df.index)  # Usar el índice directamente si ya está configurado
         serie_tiempo = pd.Series(self._df[valor_col].values, index=fechas)
         return serie_tiempo
+
 
     def __str__(self):
         return f"Correccion_Fechas(DataFrame con {len(self._df)} filas, columna de fechas: '{self._fecha_col}', frecuencia: '{self._freq}')"
