@@ -282,8 +282,8 @@ def preparar_serie_tiempo(data):
 
 def agregar_prediccion(fig, btc_ts):
     modelo_hw = ExponentialSmoothing(btc_ts, trend='add', seasonal='add', seasonal_periods=4)
-    fitted_model = modelo_hw.fit(smoothing_level=0.3, smoothing_slope=0.1, smoothing_seasonal=0.7)
-    pred_hw = fitted_model.forecast(24 * 3)  # 3 días de predicción
+    fitted_model = modelo_hw.fit(smoothing_level=0.9, smoothing_slope=0.9, smoothing_seasonal=0.1)
+    pred_hw = fitted_model.forecast(18)  # 3 días de predicción
 
     last_date = btc_ts.index[-1]
     pred_dates = pd.date_range(start=last_date, periods=len(pred_hw) + 1, freq='4H')[1:]
